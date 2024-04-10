@@ -7,7 +7,9 @@ public interface Tokenizer {
     /**
      * @return a separator to split the string base on it.
      */
-    String separator();
+    default String separator() {
+        return "\\s+";
+    }
 
     /**
      * Tokenizes the input string.
