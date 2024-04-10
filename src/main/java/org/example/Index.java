@@ -2,23 +2,20 @@ package org.example;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.example.analyzer.normalizer.Normalizer;
 import org.example.analyzer.tokenizer.Tokenizer;
 import org.example.filereader.Document;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
-import java.util.function.Predicate;
 
 @Getter
 @Builder
 public class Index {
 
     private final String name;
-    private final Normalizer normalizer;
+    private final List<Normalizer> normalizers;
     private final Tokenizer tokenizer;
     private int totalDocs;
 
@@ -33,10 +30,17 @@ public class Index {
         var isNewDocument = true;
         for (String token: tokens) {
             if (token != null && !token.isBlank())
-                isNewDocument &= addToInvertedIndex(document.getName(), normalizer.normalize(token));
+                isNewDocument &= addToInvertedIndex(document.getName(), applyNormalizers(token));
         }
 
         totalDocs += isNewDocument ? 1 : 0;
+    }
+
+    private String applyNormalizers(String token) {
+        for (Normalizer normalizer : normalizers) {
+            token = normalizer.normalize(token);
+        }
+        return token;
     }
 
     private boolean addToInvertedIndex(String documentId, String token) {
@@ -45,10 +49,5 @@ public class Index {
 
         invertedIndex.put(token, Set.of(documentId));
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("index: %s\t| totalDocs:%d\t| %s\t| %s", name, totalDocs, normalizer.getClass(), tokenizer.getClass());
     }
 }
