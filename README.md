@@ -121,8 +121,8 @@ SUN    -> Document 2
 - standard tokenizer
 - normalizers
 - search test
-  - mocking the 
-
+  - mocking
+  
 ```xml
 	<dependency>
 			<groupId>org.mockito</groupId>
@@ -132,3 +132,7 @@ SUN    -> Document 2
     </dependency>
 ```
 
+### Test Driven Development
+- how telegram searches among usernames?
+- test project
+- design the answer using TDD
