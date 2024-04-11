@@ -1,30 +1,44 @@
 package org.example;
 
-import lombok.Getter;
 import org.example.analyzer.normalizer.Normalizer;
+import org.example.analyzer.tokenizer.StandardTokenizer;
 import org.example.analyzer.tokenizer.Tokenizer;
 import org.example.filereader.Document;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-@Getter
 public class Index {
 
     private final String name;
     private final List<Normalizer> normalizers;
     private final Tokenizer tokenizer;
+    private final Tokenizer searchTokenizer;
 
-    private final Map<String, HashSet<String>> invertedIndex;
+    private final Map<String, Set<String>> invertedIndex = new HashMap<>();
+    private final HashSet<String> docs = new HashSet<>();
 
-    public Index(String name, Tokenizer tokenizer, List<Normalizer> normalizers) {
+    public Index(String name, Tokenizer tokenizer, Tokenizer searchTokenizer, List<Normalizer> normalizers) {
         this.name = name;
         this.normalizers = normalizers;
         this.tokenizer = tokenizer;
-        this.invertedIndex = new HashMap<>();
+        this.searchTokenizer = searchTokenizer;
     }
 
-    public HashSet<String> search(String query) {
-        return invertedIndex.get(applyNormalizers(query));
+    /**
+     * By default, the {@link StandardTokenizer} is used as search tokenizer.
+     */
+    public Index(String name, Tokenizer tokenizer, List<Normalizer> normalizers) {
+        this(name, tokenizer, StandardTokenizer.INSTANCE, normalizers);
+    }
+
+    public Set<String> search(String query) {
+        return searchTokenizer.tokenize(query).stream()
+                .map(q -> invertedIndex.get(applyNormalizers(q)))
+                .reduce((l1, l2) -> l1.stream()
+                        .filter(l2::contains)
+                        .collect(Collectors.toSet()))
+                .orElse(new HashSet<>());
     }
 
     public void indexDocuments(List<Document> documents) {
@@ -32,11 +46,12 @@ public class Index {
     }
 
     public void indexDocument(Document document) {
-        var tokens = tokenizer.tokenize(document.getContent());
+        var tokens = tokenizer.tokenize(document.content());
         for (String token : tokens) {
             if (token != null && !token.isBlank())
-                addToInvertedIndex(document.getName(), applyNormalizers(token));
+                addToInvertedIndex(document.name(), applyNormalizers(token));
         }
+        docs.add(document.name());
     }
 
     private String applyNormalizers(String inputString) {
