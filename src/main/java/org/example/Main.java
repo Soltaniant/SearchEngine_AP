@@ -17,8 +17,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        var bookDocuments = FileReader.getDirectoryFilesAsDocument("/home/sajad/IdeaProjects/SearchEngine_AP/src/main/resources/Books", "txt");
-        var userDocuments = FileReader.getDirectoryFilesAsDocument("/home/sajad/IdeaProjects/SearchEngine_AP/src/main/resources/Users", "txt");
+        var bookDocuments = FileReader.getDirectoryFilesAsDocument("/home/sajad/IdeaProjects/SearchEngine_AP/src/main/resources/books", "txt");
+        var userDocuments = FileReader.getDirectoryFilesAsDocument("/home/sajad/IdeaProjects/SearchEngine_AP/src/main/resources/users", "txt");
 
         bookIndex = new Index("books", StandardTokenizer.INSTANCE, List.of(MarkRemoverNormalizer.INSTANCE, UppercaseNormalizer.INSTANCE));
         userIndex = new Index("users", EdgeNGramTokenizer.INSTANCE, List.of(MarkRemoverNormalizer.INSTANCE, UppercaseNormalizer.INSTANCE));
@@ -39,7 +39,7 @@ public class Main {
 //        usernames.forEach(Main::createFiles);
 //private static void createFiles(String username) {
 //    try {
-//        FileWriter myWriter = new FileWriter("/home/sajad/IdeaProjects/SearchEngine_AP/src/main/resources/Users/" + username + ".txt");
+//        FileWriter myWriter = new FileWriter("/home/sajad/IdeaProjects/SearchEngine_AP/src/main/resources/users/" + username + ".txt");
 //        myWriter.write(username);
 //        myWriter.close();
 //        System.out.println("Successfully wrote to the file: " + username);

@@ -15,6 +15,11 @@ public class EdgeNGramTokenizer implements Tokenizer {
         this.maxGram = maxGram;
     }
 
+    @Override
+    public String separator() {
+        return "\\s+";
+    }
+
     /**
      * Splits input string based on whitespace and then add substrings according to min & max gram.
      */
