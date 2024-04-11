@@ -1,5 +1,4 @@
 # Unit Test
-<hr>
 
 ## 👋 Hello and Welcome!
 - We are going to learn: not only unit testing, but also ...
@@ -54,10 +53,9 @@ Importance:
 <br>
 
 # Project
-<hr>
 
 ## Full-Text Search
-![google animated logo](Images/google.gif)
+![google animated logo](src/main/resources/Images/google.gif)
 
 **Question:**
 - how it works?
