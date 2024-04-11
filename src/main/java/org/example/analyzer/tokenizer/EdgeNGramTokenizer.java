@@ -26,13 +26,12 @@ public class EdgeNGramTokenizer implements Tokenizer {
     @Override
     public List<String> tokenize(String inputString) {
         List<String> tokens = new ArrayList<>();
-        StandardTokenizer.INSTANCE.tokenize(inputString).forEach(word -> {
-            for (int i = minGram; i <= maxGram; i++) {
-                for (int j = 0; j <= word.length() - i; j++) {
-                    tokens.add(word.substring(j, j + i));
-                }
+
+        for (int i = minGram; i <= maxGram; i++) {
+            for (int j = 0; j <= inputString.length() - i; j++) {
+                tokens.add(inputString.substring(j, j + i));
             }
-        });
+        }
         return tokens;
     }
 }

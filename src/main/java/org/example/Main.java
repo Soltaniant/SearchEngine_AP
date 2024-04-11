@@ -7,10 +7,15 @@ import org.example.analyzer.tokenizer.EdgeNGramTokenizer;
 import org.example.analyzer.tokenizer.StandardTokenizer;
 import org.example.filereader.FileReader;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
+
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLUE = "\u001B[34m";
 
     private static Index bookIndex;
     private static Index userIndex;
@@ -26,25 +31,26 @@ public class Main {
         bookIndex.indexDocuments(bookDocuments);
         userIndex.indexDocuments(userDocuments);
 
-        printList(bookIndex.search("software testing"));
-        printList(userIndex.search("saja solta"));
+        String input;
+        Scanner scanner = new Scanner(System.in);
+        System.out.printf("serach -> ");
+        while (!(input = scanner.nextLine()).isBlank()) {
+            var inputParts = Arrays.stream(input.split(":")).map(String::trim).toList();
+            switch (inputParts.get(0)) {
+                case "users":
+                    printList(userIndex.search(inputParts.get(1)));
+                    break;
+                case "books":
+                    printList(bookIndex.search(inputParts.get(1)));
+                    break;
+            }
+            System.out.printf("serach -> ");
+        }
     }
 
     private static void printList(Collection<String> items) {
-        items.forEach(System.out::println);
+        var index = 0;
+        for(String i : items)
+            System.out.println(String.format("%s %d-%s %s", ANSI_BLUE, index++, ANSI_RESET, i));
     }
 }
-
-//var usernames = List.of("s_soltanian", "sajad soltanian", "alizadeh", "alireza", "soltani", "milad sajadi", "sajed molaei", "alimardani", "Alishah", "Reza Soltanian", "Soltani1432", "Rezaei", "Rezaeian", "Ali Majidi", "Majid Tavakoli", "Mohammad Mohammadi", "Mohammad Keymaram", "Mohammad Alizadeh", "zahra mohammadi", "zahra soltankhah", "zahra majidi", "maryam mohammadzadeh", "Mohammad maryamzadeh", "mahdi mohammadi", "mohammad mahdi mohammadi", "fateme sadat rezavi", "fateme safaei");
-//        usernames.forEach(Main::createFiles);
-//private static void createFiles(String username) {
-//    try {
-//        FileWriter myWriter = new FileWriter("/home/sajad/IdeaProjects/SearchEngine_AP/src/main/resources/users/" + username + ".txt");
-//        myWriter.write(username);
-//        myWriter.close();
-//        System.out.println("Successfully wrote to the file: " + username);
-//    } catch (IOException e) {
-//        System.out.println("An error occurred.");
-//        e.printStackTrace();
-//    }
-//}

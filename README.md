@@ -107,4 +107,28 @@ IN     -> Document 2
 SUN    -> Document 2
 ```
 
+## Now On Code!
+### 1: general look
+- analyzer
+  - tokenizer interface -> standard tokenizer
+  - normalizer interface
+- file reader & document
+- index class
+- run project :)
+  - refactor the main class
+
+### Write tests
+- standard tokenizer
+- normalizers
+- search test
+  - mocking the 
+
+```xml
+	<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>3.2.4</version>
+			<scope>test</scope>
+    </dependency>
+```
 
